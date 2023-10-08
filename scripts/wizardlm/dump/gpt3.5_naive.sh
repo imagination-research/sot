@@ -1,0 +1,15 @@
+python sot/main.py \
+--model openai \
+--scheduler naive \
+--data-path data/wizardlm/data.csv \
+--output-folder results/wizardlm/wizardlm_gpt3.5_naive \
+--api-type azure \
+--api-base ${API_BASE} \
+--api-version 2023-03-15-preview \
+--temperature 0.7 \
+--max-tokens 5000 \
+--top-p 0.95 \
+--frequency-penalty 0 \
+--presence-penalty 0 \
+--engine ${ENGINE} \
+--system-message 'You are an AI assistant that helps people find information.' \

@@ -1,0 +1,16 @@
+python sot/main.py \
+--model openai \
+--scheduler naive \
+--data-path data/vicuna/data.csv \
+--output-folder results/vicuna/vicuna_gpt4_router \
+--api-type open_ai \
+--api-base https://api.openai.com/v1 \
+--temperature 0.7 \
+--max-tokens 10 \
+--top-p 0.95 \
+--frequency-penalty 0 \
+--presence-penalty 0 \
+--api-model gpt-4-0613 \
+--system-message 'You are an AI assistant that helps people find information.' \
+--timeout 240 \
+--prompt-file prompts/router_gpt4.json

@@ -1,0 +1,16 @@
+python sot/main.py \
+--model openai \
+--scheduler outline \
+--data-path data/wizardlm/data.csv \
+--output-folder results/wizardlm/wizardlm_gpt4_outline \
+--api-type open_ai \
+--api-base https://api.openai.com/v1 \
+--temperature 0.7 \
+--max-tokens 5000 \
+--top-p 0.95 \
+--frequency-penalty 0 \
+--presence-penalty 0 \
+--api-model gpt-4-0613 \
+--system-message 'You are an AI assistant that helps people find information.' \
+--prompt-file prompts/sot_gpt4.json \
+--timeout 240

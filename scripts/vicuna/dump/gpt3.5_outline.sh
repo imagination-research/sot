@@ -1,0 +1,16 @@
+python sot/main.py \
+--model openai \
+--scheduler outline \
+--data-path data/vicuna/data.csv \
+--output-folder results/vicuna/vicuna_gpt3.5_outline \
+--api-type azure \
+--api-base ${API_BASE} \
+--api-version 2023-03-15-preview \
+--temperature 0.7 \
+--max-tokens 5000 \
+--top-p 0.95 \
+--frequency-penalty 0 \
+--presence-penalty 0 \
+--engine ${ENGINE} \
+--system-message 'You are an AI assistant that helps people find information.' \
+--prompt-file prompts/sot_chatgpt.json

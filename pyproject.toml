@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sot"
+version = "0.0.1"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "tqdm",
+    "pandas",
+    "openai", "tenacity", # API model
+    "fschat==0.2.26", "transformers", "accelerate", # open-source model (based on fastchat and huggingface Transformer)
+    "rwkv", "ninja", # rwkv-4-raven; rwkv-4-raven also needs `nvcc` to be installed and can be found in $PATH
+    "einops", # mosaicml/mpt-7b-chat
+    "cpm_kernels", # THUDM/chatglm-6b
+    "termcolor", # prompt_eng_main.py
+    "ipdb", # prompt_eng_main.py
+    "ipython", # prompt_eng_main.py
+    "gradio",
+]
+
+[project.optional-dependencies]
+dev = ["pre-commit", "black"]
+# nlgeval = ["nltk", "absl-py", "rouge-score", "bert_score"]
+
+[project.urls]
+"Homepage" = "https://sites.google.com/view/sot-llm"
+
+[tool.setuptools.packages.find]
+exclude = ["docs", "dist*", "scripts*", "tests*", "data*", "results*"]
+
+[tool.wheel]
+exclude = ["docs", "dist*", "scripts*", "tests*", "data*", "results*"]
