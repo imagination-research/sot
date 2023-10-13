@@ -29,6 +29,7 @@ The repo is organized as follows.
 ## Contents
 - [Install](#install)
 - [Test SoT with Gradio Demo](#test-sot-with-gradio-demo)
+- [Test SoT in the Console](#test-sot-in-the-console)
 - [Evaluate SoT](#evaluate-sot)
 - [Develop SoT](#develop-sot)
 - [Acknowledgement](#acknowledgement)
@@ -39,15 +40,14 @@ The repo is organized as follows.
 
 We recommend using Python 3.8 to 3.10.
 
-Some required environment variables/setups:
-* Before running the open-source models, please log in to huggingface through `huggingface-cli login` so that the models can be downloaded automatically.
+Some required environment variables/setups for using the API-based models:
 * For GPT4, the script by default uses **OpenAI API**. The API key should be provided by `export OPENAI_API_KEY=<API key>`. 
 * For GPT-3.5, the script by default uses **Azure OpenAI API**. The API key, engine, and API base should be provided by `export OPENAI_API_KEY=<API key>`, `export ENGINE=<engine>`, and `export API_BASE=<API base>`.
   > Note that GPT-4 can also use **Azure OpenAI API**, and GPT-3.5 can also use **OpenAI API**, by modifying the command line arguments accordingly. 
 * For Claude, please refer to [Claude setup guide](claude_setup_guide.md).
 
 ## Test SoT with Gradio Demo
-The SoT gradio demo can be started as follows (under the [`demo/`](demo/) directory):
+The SoT gradio demo for open-source models can be started by running the following commands under the [`demo/`](demo/) directory:
 
 1. Launch the controller
   ```
@@ -71,6 +71,9 @@ The SoT gradio demo can be started as follows (under the [`demo/`](demo/) direct
   ```
   python gradio_web_server_multi.py
   ```
+
+## Test SoT in the Console
+Besides chatting with SoT using the web demo, another convenient way to check how SoT works on specific questions is to use the `sot/prompt_eng_main.py` helper program. In the interactive session popped by `sot/prompt_eng_main.py`, one can issue questions saved in data files to SoT and check the outputs in the console conveniently. See [this section](#manually-tune-the-sot-prompts) for more details.
 
 ## Evaluate SoT
 ### Prepare the dataset
@@ -101,22 +104,22 @@ The evaluation scripts use the comparison prompts provided by Fastchat or LLMZoo
 ### Manually tune the SoT prompts
 `sot/prompt_eng_main.py` is a helper program to ease manual prompt tuning. Use `bash scripts/debug_prompt.sh <model name or path>` to run the script. This will pop an interactive session in which you can run the following commands:
 
-1. `use <data filepath>` to load data (default: `data/vicuna/data.csv`)
+1. `usedata <data filepath>` to load data from the given filepath (default: `data/vicuna/data.csv`)
 2. `useprompt <prompt filepath>` to change the SoT prompt templates (default: `prompts/sot_opensource.json`)
 3. `usenaiveprompt <prompt filepath>` to change the normal prompt template (default to use only the question)
-4.  (1) `test <ind>` to test SoT decoding for the ind-th question; (2) `test naive <ind>` to test normal decoding; (3) `test batch_outline <ind>` to test SoT decoding with batched point expansion.
+4.  (1) `test <ind>` to test SoT decoding for the `<ind>`-th question; (2) `test naive <ind>` to test normal decoding; (3) `test batch_outline <ind>` to test SoT decoding with batched point expansion.
     * The model outputs will be streamed onto the console (by enabling `--stream` argument to `sot/prompt_eng_main.py`). Note that when using `test <ind>`, the expansion of multiple points is conducted sequentially. When using `test batch_outline <ind>`, the expansion of multiple points is conducted with batch inference, but we do not support streaming the parallel expansion outputs to the console (to check the streaming effect, use the Gradio Web Demo), so one have to wait until the point-expanding completion to see the results.
     * After the completion, statistics will also be printed.
     * At any time during the generation, one can push Ctrl+C to abort the generation to go back to the interactive session.
 5. `exit` to exit the session
 
 > Note:
-> 1. We mainly use this program to help engineer the prompt for the open-source models.
+> 1. We mainly use this program to help engineer the prompt for the open-source models, and didn't test it with the API-based models.
 > 2. Any other command-line arguments for the model can be fed as the arguments to this script. For example, as testing a 13B model on RTX 3090 with FP16 inference requires two GPUs, we can run
 > ```bash scripts/debug_prompt.sh meta-llama/Llama-2-13b-chat-hf --num-gpus 2```
 
 ### Train the router for SoT-R
-Preprocess router data and train the RoBERTa router as follows (scripts in [sot/train/](sot/train/)):
+Preprocess router data and train the RoBERTa router as follows (scripts in [`sot/train/`](sot/train/)):
 
 1. Preprocess the router data for Vicuna-80, WizardLM, and LIMA:
   ```
