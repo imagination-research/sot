@@ -22,7 +22,7 @@ If you find this repository or paper useful, you can cite
 The repo is organized as follows.
 * The SoT implementation is under [`sot/`](sot/).
 * The SoT prompts are given under [`prompts/`](prompts/). For example, `sot_opensource.json` is used for all open-source models, and `sot_gpt4` is used for the GPT-4 API.
-* The processed data are under [`data/`](data/).
+* The processed data is under [`data/`](data/).
 * The scripts under [`scripts/`](scripts/) are used to dump and evaluate the results.
 * The Gradio demo code is under [`demo/`](demo/). The demo is built based on the FastChat demo code.
 
@@ -58,12 +58,12 @@ The SoT gradio demo for open-source models can be started by running the followi
     ```
     CUDA_VISIBLE_DEVICES=0 python model_worker.py --model-path ${MODEL_NAME} --controller http://0.0.0.0:21001 --port 31000 --worker http://0.0.0.0:31000
     ```
-  - Lauch a model worker that conducts SoT-R decoding on GPU 1.
+  - Launch a model worker that conducts SoT-R decoding (with RoBERTa router) on GPU 1.
     ```
     CUDA_VISIBLE_DEVICES=1 python model_worker.py --model-path ${MODEL_NAME} --controller http://0.0.0.0:21001 --port 31001 --worker http://0.0.0.0:31001 --sot ../prompts/sot_opensource.json --sotr ${ROUTER_MODEL}
     ```
     The trained router model can be downloaded from [this Google Drive](https://drive.google.com/file/d/1LxEsH9NFwj41wBz8tnT_hwn5LbW7aaL5/view?usp=sharing).
-  - Note that we recommend directly using SoT-R instead of the plain SoT. But if one wants to trigger SoT for all questions, he or she can launch another model worker as follows:
+  - Note that we recommend directly using SoT-R instead of the plain SoT. But if one wants to trigger SoT for all questions, please use the following command instead:
     ```
     CUDA_VISIBLE_DEVICES=1 python model_worker.py --model-path ${MODEL_NAME} --controller http://0.0.0.0:21001 --port 31002 --worker http://0.0.0.0:31002 --sot ../prompts/sot_opensource.json
     ```
@@ -77,7 +77,7 @@ Besides chatting with SoT using the web demo, another convenient way to check ho
 
 ## Evaluate SoT
 ### Prepare the dataset
-Vicuna-80, WizardLM, and LIMA data is provided under [`data/`](data/) and is ready to use. The pre-processing scripts for getting the data are also attached (`create_dataset.py` in each folder) for reference.
+Vicuna-80, WizardLM, and LIMA data are provided under [`data/`](data/) and are ready to use. The pre-processing scripts for getting the data are also attached (`create_dataset.py` in each folder) for reference.
 
 ### Dump the answers of SoT and Normal decoding
 We put the answer dumping scripts for the Vicuna-80 and WizardLM datasets under [`scripts/vicuna/dump/`](scripts/vicuna/dump/) and [`scripts/wizardlm/dump/`](scripts/wizardlm/dump/).
@@ -95,20 +95,22 @@ To dump the normal sequential decoding answers of GPT-3.5, we can run
 ### Evaluate the answer quality
 We put the evaluation scripts for the Vicuna-80 and WizardLM datasets under [`scripts/vicuna/evaluate/`](scripts/vicuna/evaluate/) and [`scripts/wizardlm/evaluate/`](scripts/wizardlm/evaluate/).
 
-The evaluation scripts use the comparison prompts provided by Fastchat or LLMZoo to prompt a GPT-4 judge to compare the quality of two answers.  Please provide OpenAI API key by `export OPENAI_API_KEY=<API key>` before running the scripts.
+The evaluation scripts use the comparison prompts provided by Fastchat or LLMZoo to prompt a GPT-4 judge to compare the quality of two answers.  Please provide the OpenAI API key by `export OPENAI_API_KEY=<API key>` before running the scripts.
 
 > Note: We did not use the system prompt except for the LLaMA-2 models when conducting open-source model evaluation in our paper (for both normal decoding and SoT decoding). This is because we use an [older FastChat version](https://github.com/lm-sys/FastChat/tree/f1f2294a66956b340c577fab2751d86f45e71099) for the evaluation in the paper. As our code removes the template messages in the conversation template before querying the model, the system prompt will be removed as template messages in the old FastChat version. Nevertheless, in this code repository, we use a newer version of FastChat (v0.2.26). Consequently, running SoT with the current code will use the system prompt for all open-source models.
+
+> The above evaluation is only for SoT (without routers). Please refer to [`prompts/router_gpt4.json`](prompts/router_gpt4.json) for the prompt we use for SoT-R with Prompting Router (using GPT-4), and [this section](#train-the-router-for-sot-r) for details about SoT-R with Trained Router (using RoBERTa).
 
 
 ## Develop SoT
 ### Manually tune the SoT prompts
 `sot/prompt_eng_main.py` is a helper program to ease manual prompt tuning. Use `bash scripts/debug_prompt.sh <model name or path>` to run the script. This will pop an interactive session in which you can run the following commands:
 
-1. `usedata <data filepath>` to load data from the given filepath (default: `data/vicuna/data.csv`)
+1. `usedata <data filepath>` to load data from the given file path (default: `data/vicuna/data.csv`)
 2. `useprompt <prompt filepath>` to change the SoT prompt templates (default: `prompts/sot_opensource.json`)
 3. `usenaiveprompt <prompt filepath>` to change the normal prompt template (default to use only the question)
 4.  (1) `test <ind>` to test SoT decoding for the `<ind>`-th question; (2) `test naive <ind>` to test normal decoding; (3) `test batch_outline <ind>` to test SoT decoding with batched point expansion.
-    * The model outputs will be streamed onto the console (by enabling `--stream` argument to `sot/prompt_eng_main.py`). Note that when using `test <ind>`, the expansion of multiple points is conducted sequentially. When using `test batch_outline <ind>`, the expansion of multiple points is conducted with batch inference, but we do not support streaming the parallel expansion outputs to the console (to check the streaming effect, use the Gradio Web Demo), so one have to wait until the point-expanding completion to see the results.
+    * The model outputs will be streamed onto the console (by enabling `--stream` argument to `sot/prompt_eng_main.py`). Note that when using `test <ind>`, the expansion of multiple points is conducted sequentially. When using `test batch_outline <ind>`, the expansion of multiple points is conducted with batch inference, but we do not support streaming the parallel expansion outputs to the console (to check the streaming effect, use the Gradio Web Demo), so one has to wait until the point-expanding completion to see the results.
     * After the completion, statistics will also be printed.
     * At any time during the generation, one can push Ctrl+C to abort the generation to go back to the interactive session.
 5. `exit` to exit the session
