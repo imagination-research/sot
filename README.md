@@ -73,7 +73,7 @@ The SoT gradio demo for open-source models can be started by running the followi
   ```
 
 ## Test SoT in the Console
-Besides chatting with SoT using the web demo, another convenient way to check how SoT works on specific questions is to use the `sot/prompt_eng_main.py` helper program. In the interactive session popped by `sot/prompt_eng_main.py`, one can issue questions saved in data files to SoT and check the outputs in the console conveniently. See [this section](#manually-tune-the-sot-prompts) for more details.
+Besides chatting with SoT using the web demo, another convenient way to check how SoT works on specific questions is to use the `sot/prompt_eng_main.py` helper program. In the interactive session popped by this helper program, one can issue questions saved in data files to SoT and check the outputs in the console conveniently. See [this section](#manually-tune-the-sot-prompts) for more details.
 
 ## Evaluate SoT
 ### Prepare the dataset
@@ -97,9 +97,10 @@ We put the evaluation scripts for the Vicuna-80 and WizardLM datasets under [`sc
 
 The evaluation scripts use the comparison prompts provided by Fastchat or LLMZoo to prompt a GPT-4 judge to compare the quality of two answers.  Please provide the OpenAI API key by `export OPENAI_API_KEY=<API key>` before running the scripts.
 
-> Note: We did not use the system prompt except for the LLaMA-2 models when conducting open-source model evaluation in our paper (for both normal decoding and SoT decoding). This is because we use an [older FastChat version](https://github.com/lm-sys/FastChat/tree/f1f2294a66956b340c577fab2751d86f45e71099) for the evaluation in the paper. As our code removes the template messages in the conversation template before querying the model, the system prompt will be removed as template messages in the old FastChat version. Nevertheless, in this code repository, we use a newer version of FastChat (v0.2.26). Consequently, running SoT with the current code will use the system prompt for all open-source models.
+> Note:
+> We did not use the system prompt except for the LLaMA-2 models when conducting open-source model evaluation in our paper (for both normal decoding and SoT decoding). This is because we use an [older FastChat version](https://github.com/lm-sys/FastChat/tree/f1f2294a66956b340c577fab2751d86f45e71099) for the evaluation in the paper. As our code removes the template messages in the conversation template before querying the model, the system prompt will be removed as template messages in the old FastChat version. Nevertheless, in this code repository, we use a newer version of FastChat (v0.2.26). Consequently, running SoT with the current code will use the system prompt for all open-source models.
 
-> The above evaluation is only for SoT (without routers). Please refer to [`prompts/router_gpt4.json`](prompts/router_gpt4.json) for the prompt we use for SoT-R with Prompting Router (using GPT-4), and [this section](#train-the-router-for-sot-r) for details about SoT-R with Trained Router (using RoBERTa).
+The above evaluation is only for SoT (without routers). Please refer to [`prompts/router_gpt4.json`](prompts/router_gpt4.json) for the prompt we use for SoT-R with Prompting Router (using GPT-4), and [this section](#train-the-router-for-sot-r) for details about SoT-R with Trained Router (using RoBERTa).
 
 
 ## Develop SoT
