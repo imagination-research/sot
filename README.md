@@ -3,6 +3,7 @@
 **[[website](https://sites.google.com/view/sot-llm/home)]**
 **[[paper](https://arxiv.org/abs/2307.15337)]**
 **[[code](https://github.com/imagination-research/sot)]**
+**[[blog](https://www.microsoft.com/en-us/research/blog/skeleton-of-thought-parallel-decoding-speeds-up-and-improves-llm-output/)]**
 
 This work aims at decreasing the end-to-end generation latency of large language models (LLMs). One of the major causes of the high generation latency is the sequential decoding approach adopted by almost all state-of-the-art LLMs. In this work, motivated by the thinking and writing process of humans, we propose Skeleton-of-Thought (SoT), which first guides LLMs to generate the skeleton of the answer, and then conducts parallel API calls or batched decoding to complete the contents of each skeleton point in parallel. Not only does SoT provide considerable speed-ups across 12 LLMs, but it can also potentially improve the answer quality on several question categories. To make the overall solution more practical, an extension, SoT with Router (SoT-R), employs a GPT-4-prompting router or a trained RoBERTa router to only trigger SoT for suitable questions. SoT is an initial attempt at data-centric optimization for inference efficiency, and further underscores the potential of pushing LLMs to think more like a human for answer quality.
 
