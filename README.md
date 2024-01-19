@@ -1,7 +1,8 @@
 # Skeleton-of-Thought: Large Language Models Can Do Parallel Decoding
 
 **[[website](https://sites.google.com/view/sot-llm/home)]**
-**[[paper](https://arxiv.org/abs/2307.15337)]**
+**[[paper (ICLR 2024)](https://openreview.net/forum?id=mqVgBbNCm9)]**
+**[[paper (arXiv)](https://arxiv.org/abs/2307.15337)]**
 **[[code](https://github.com/imagination-research/sot)]**
 **[[blog](https://www.microsoft.com/en-us/research/blog/skeleton-of-thought-parallel-decoding-speeds-up-and-improves-llm-output/)]**
 
