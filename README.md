@@ -1,4 +1,4 @@
-# Skeleton-of-Thought: Large Language Models Can Do Parallel Decoding
+# Skeleton-of-Thought: Prompting LLMs for Efficient Parallel Generation
 
 **[[website](https://sites.google.com/view/sot-llm/home)]**
 **[[paper (ICLR 2024)](https://openreview.net/forum?id=mqVgBbNCm9)]**
@@ -11,13 +11,13 @@ This work aims at decreasing the end-to-end generation latency of large language
 
 If you find this repository or paper useful, you can cite
 ```
-@misc{ning2023skeletonofthought,
-      title={Skeleton-of-Thought: Large Language Models Can Do Parallel Decoding}, 
-      author={Xuefei Ning and Zinan Lin and Zixuan Zhou and Zifu Wang and Huazhong Yang and Yu Wang},
-      year={2023},
-      eprint={2307.15337},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+@inproceedings{
+ning2024skeletonofthought,
+title={Skeleton-of-Thought: Prompting LLMs for Efficient Parallel Generation},
+author={Xuefei Ning and Zinan Lin and Zixuan Zhou and Zifu Wang and Huazhong Yang and Yu Wang},
+booktitle={The Twelfth International Conference on Learning Representations},
+year={2024},
+url={https://openreview.net/forum?id=mqVgBbNCm9}
 }
 ```
 
